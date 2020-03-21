@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html>
+  <head>
+    <title>Generator brojeva zadatka</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <style type="text/css">/* <![CDATA[ */
+      body {
+        background-color: #00a0a0;
+        color: #000066;
+        font-size: 20px;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+    /* ]]> */</style>
+    <script type="text/javascript">/* <![CDATA[ */
+      function next(s) {
+        s *= 1103515245;
+        s += 12345;
+        s %= 0x100000000;
+        return s;
+      }
+
+      function rand(s) {
+        s /= 65536;
+        s |= 0;
+        s %= 32768;
+        return s;
+      }
+
+      const N = 18;
+
+      function norm(s) {
+        s %= N;
+        s++;
+        return s;
+      }
+
+      function generate() {
+        let seed = document.getElementById('seed').value;
+        seed = parseInt(seed)*12347;
+        seed = next(seed);
+        let z = [];
+        z[0] = norm(rand(seed));
+        do {
+          seed = next(seed);
+          z[1] = norm(rand(seed));
+        } while(z[1] == z[0]);
+        do {
+          seed = next(seed);
+          z[2] = norm(rand(seed));
+        } while(z[2] == z[0] || z[2] == z[1]);
+        z = z.sort(function(a, b){ return a - b; })
+        document.getElementById('out').innerHTML = z[0] + ', ' + z[1] + ', ' + z[2];
+      }
+    /* ]]> */</script>
+  </head>
+  <body>
+    Broj indexa: <input id="seed"/>
+    <button onclick="generate()">Generiši</button>
+    <p>
+    Zadaci: <span id="out"></span>
+  </body>
+</html>
